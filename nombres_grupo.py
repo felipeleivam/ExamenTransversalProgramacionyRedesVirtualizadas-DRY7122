@@ -3,7 +3,6 @@ integrantes = [
     {"nombre": "Juan Carlos", "apellido": "Hernandez"},
     {"nombre": "Felipe", "apellido": "Leiva"},
     {"nombre": "Samuel", "apellido": "Valdebenito"}
-    # Agrega más si es necesario
 ]
 
 print("Integrantes del grupo:")
