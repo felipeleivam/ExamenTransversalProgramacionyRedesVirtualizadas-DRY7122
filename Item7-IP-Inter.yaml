@@ -1,0 +1,17 @@
+---
+    - name: AUTOMATIC BACKUP OF RUNNING-CONFIG
+      hosts: CSR1kv
+      gather_facts: false
+      connection: local
+     
+      tasks:
+       - name: Configuracion de IP e Interfaces
+         ios_command:
+           commands:
+             - show ip interface brief  
+         register: showip
+     
+       - name: SAVE OUTPUT TO ./backups/
+         copy:
+           content: "{{ showip.stdout[0] }}"
+           dest: "./Informe-show_brief_{{ inventory_hostname }}.txt"
