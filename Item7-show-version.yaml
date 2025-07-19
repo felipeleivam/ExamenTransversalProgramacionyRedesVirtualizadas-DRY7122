@@ -1,0 +1,17 @@
+---
+  - name: AUTOMATIC BACKUP OF RUNNING-CONFIG
+    hosts: CSR1kv
+    gather_facts: false
+    connection: local
+   
+    tasks:
+     - name: Version
+       ios_command:
+         commands:
+           - show version 
+       register: showversion
+   
+     - name: SAVE OUTPUT TO ./backups/
+       copy:
+         content: "{{ showversion.stdout[0] }}"
+         dest: "./Informe-show_version_{{ inventory_hostname }}.txt"
