@@ -1,0 +1,29 @@
+---
+  - name: CONFIGURAR EIGRP
+    hosts: CSR1kv
+    gather_facts: false
+    connection: local
+  
+    tasks:
+     - name: ESTABLECER CONFIGURACION EIGRP
+       ios_config:
+         parents: "router eigrp 100" # Entra al modo de configuración de EIGRP con AS 100
+         lines: # Comandos a configurar dentro de la sección "router eigrp 100"
+           - network 1.0.0.0
+           - network 192.168.56.0
+           - no auto-summary # Recomendado para EIGRP en redes modernas
+           - passive-interface default
+          
+         save_when: always # Asegura que la configuración se guarde
+  
+     - name: MOSTRAR CONFIGURACION EIGRP
+       ios_command:
+         commands:
+           - show running-config | section eigrp # Comando para validar la sección EIGRP
+           
+       register: eigrp_output
+  
+     - name: SAVE OUTPUT TO ./backups/
+       copy:
+         content: "{{ eigrp_output.stdout[0] }}"
+         dest: "./EIGRP-config-validation-{{ inventory_hostname }}.txt"
